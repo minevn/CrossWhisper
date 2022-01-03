@@ -1,0 +1,5 @@
+message:
+ sent: '&aNhắn đến &b%receiver% &6&l&o> %message%'
+ received: '&b%sender% &anhắn đến bạn &6&l&o> %message%'
+ blocked: 'blocked'
+ not-online: 'not online'
