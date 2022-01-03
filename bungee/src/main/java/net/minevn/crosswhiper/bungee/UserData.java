@@ -7,9 +7,12 @@ import java.io.File;
 import java.util.*;
 
 public class UserData {
+    private static final File root = new File(CWBungee.getInstance().getDataFolder(), "userdata");
+
+//    private ProxiedPlayer player;
     private boolean blocked = false;
     private List<String> blackList = new ArrayList<>();
-    private static final File root = new File(CWBungee.getInstance().getDataFolder(), "userdata");
+    private String lastMessage = null;
 
     public UserData(ProxiedPlayer player) {
         Configuration data = Configs.loadFromFile(new File(root, player.getUniqueId().toString() + ".yml"));
@@ -17,6 +20,7 @@ public class UserData {
             blocked = data.get("blocked", false);
             blackList = data.getStringList("black-list");
         }
+        getDataMap().put(player.getUniqueId(), this);
     }
 
     public boolean isBlocked() {
@@ -31,12 +35,20 @@ public class UserData {
         return blackList;
     }
 
+    public String getLastMessage() {
+        return lastMessage;
+    }
+
     //region static
     private static Map<UUID, UserData> data;
 
     private static Map<UUID, UserData> getDataMap() {
         if (data == null) data = new HashMap<>();
         return data;
+    }
+
+    public static UserData getData(ProxiedPlayer player) {
+        return  getDataMap().get(player.getUniqueId());
     }
     //endregion
 }

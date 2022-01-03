@@ -1,5 +1,6 @@
 package net.minevn.crosswhiper.bungee;
 
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -40,6 +41,27 @@ public class CWBungee extends Plugin implements Listener {
 
     public Configs getConfig() {
         return config;
+    }
+
+    public void sendMessage(ProxiedPlayer sender, ProxiedPlayer receiver, String message) {
+        if (sender == null || !sender.isConnected()) return;
+        UserData udata;
+        if (receiver == null || receiver.isConnected() || (udata = UserData.getData(receiver)) == null) {
+            sender.sendMessage(getConfig().getNotOnlineMessage());
+            return;
+        }
+        if (udata.isBlocked() || udata.isBlackList(sender)) {
+            sender.sendMessage(getConfig().getBlockedMessage());
+            return;
+        }
+        receiver.sendMessage(getConfig().getSentMessage()
+                .replace("%sender%", sender.getName())
+                .replace("%message%", message)
+        );
+        sender.sendMessage(getConfig().getSentMessage()
+                .replace("%receiver%", receiver.getName())
+                .replace("%message%", message)
+        );
     }
 
     @EventHandler
