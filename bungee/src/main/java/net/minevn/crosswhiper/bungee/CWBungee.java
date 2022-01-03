@@ -34,7 +34,7 @@ public class CWBungee extends Plugin implements Listener {
             try (InputStream in = getResourceAsStream("bungeeconfig.yml")) {
                 Files.copy(in, config.toPath());
             } catch (IOException e) {
-                getLogger().log(Level.SEVERE, "Can save config", e);
+                getLogger().log(Level.SEVERE, "Can't save config", e);
             }
         }
     }
