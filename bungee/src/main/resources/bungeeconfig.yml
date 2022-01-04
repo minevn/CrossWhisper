@@ -1,5 +1,7 @@
 message:
- sent: '&aNhắn đến &b%receiver% &6&l&o> %message%'
- received: '&b%sender% &anhắn đến bạn &6&l&o> %message%'
- blocked: 'blocked'
- not-online: 'not online'
+ sent: '&aNhắn đến &b%receiver% &6&l&o> &f%message%'
+ received: '&b%sender% &anhắn đến bạn &6&l&o> &f%message%'
+ blocked: '&cNgười này hiện không muốn nhận tin nhắn riêng.'
+ not-online: '&cNgười này hiện không online.'
+ self: '&cBạn không thể gửi tin nhắn đến chính mình.'
+ no-recent: '&cGần đây bạn không nhắn tin riêng với ai.'

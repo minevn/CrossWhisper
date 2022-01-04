@@ -1,11 +1,13 @@
-package net.minevn.crosswhiper.bungee;
+package net.minevn.crosswhisper.bungee;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.LoginEvent;
+import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.event.EventHandler;
-import net.minevn.crosswhiper.bungee.models.Constants;
+import net.minevn.crosswhisper.models.Constants;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -45,16 +47,23 @@ public class CWBungee extends Plugin implements Listener {
 
     public void sendMessage(ProxiedPlayer sender, ProxiedPlayer receiver, String message) {
         if (sender == null || !sender.isConnected()) return;
-        UserData udata;
-        if (receiver == null || receiver.isConnected() || (udata = UserData.getData(receiver)) == null) {
+        if (sender == receiver) {
+            sender.sendMessage(getConfig().getSelfMessage());
+            return;
+        }
+        UserData sdata = UserData.getData(sender);
+        UserData rdata;
+        if (receiver == null || !receiver.isConnected() || (rdata = UserData.getData(receiver)) == null) {
             sender.sendMessage(getConfig().getNotOnlineMessage());
             return;
         }
-        if (udata.isBlocked() || udata.isBlackList(sender)) {
+        if (rdata.isBlocked() || rdata.isBlackList(sender)) {
             sender.sendMessage(getConfig().getBlockedMessage());
             return;
         }
-        receiver.sendMessage(getConfig().getSentMessage()
+        rdata.setLastMessage(sender.getName());
+        sdata.setLastMessage(receiver.getName());
+        receiver.sendMessage(getConfig().getReceivedMessage()
                 .replace("%sender%", sender.getName())
                 .replace("%message%", message)
         );
@@ -73,6 +82,17 @@ public class CWBungee extends Plugin implements Listener {
         } catch (Exception ex) {
             getLogger().log(Level.SEVERE, "Error processing packet", ex);
         }
+    }
+
+    @EventHandler
+    public void onLogin(LoginEvent e) {
+        new UserData(e.getConnection().getUniqueId());
+    }
+
+    @EventHandler
+    public void onDisconnect(PlayerDisconnectEvent e) {
+        UserData data = UserData.getData(e.getPlayer());
+        if (data != null) data.destroy();
     }
 
     //region singleton

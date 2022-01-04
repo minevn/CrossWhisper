@@ -1,0 +1,14 @@
+name: CrossWhisper
+author: MasterClaus
+version: 1.0
+main: net.minevn.crosswhisper.bukkit.CWBukkit
+commands:
+  w:
+    aliases:
+      - to
+      - whisper
+      - pm
+      - msg
+  r:
+    aliases:
+      - reply

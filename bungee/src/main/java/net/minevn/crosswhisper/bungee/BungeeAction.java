@@ -1,4 +1,4 @@
-package net.minevn.crosswhiper.bungee;
+package net.minevn.crosswhisper.bungee;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -21,9 +21,11 @@ public enum BungeeAction {
             ProxiedPlayer sender = main.getProxy().getPlayer(data.readUTF());
             String message = data.readUTF();
             UserData udata = UserData.getData(sender);
-            ProxiedPlayer receiver = udata == null || udata.getLastMessage() == null
-                    ? null
-                    : main.getProxy().getPlayer(udata.getLastMessage());
+            if (udata.getLastMessage() == null) {
+                sender.sendMessage(main.getConfig().getNoRecentMessage());
+                return;
+            }
+            ProxiedPlayer receiver = main.getProxy().getPlayer(udata.getLastMessage());
             main.sendMessage(sender, receiver, message);
         }
     }
