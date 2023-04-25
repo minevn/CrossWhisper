@@ -12,3 +12,4 @@ commands:
   r:
     aliases:
       - reply
+  spy:

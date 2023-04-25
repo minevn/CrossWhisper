@@ -11,11 +11,13 @@ import net.minevn.crosswhisper.models.Constants;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.logging.Level;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class CWBungee extends Plugin implements Listener {
     private Configs config;
+    private HashMap<ProxiedPlayer, String> spyMap;
 
     @Override
     public void onEnable() {
@@ -24,6 +26,7 @@ public class CWBungee extends Plugin implements Listener {
         getProxy().getPluginManager().registerListener(this, this);
         generateConfig();
         config = new Configs(this);
+        spyMap = new HashMap<>();
     }
 
     private void generateConfig() {
@@ -71,6 +74,17 @@ public class CWBungee extends Plugin implements Listener {
                 .replace("%receiver%", receiver.getName())
                 .replace("%message%", message)
         );
+
+        for(ProxiedPlayer spy : spyMap.keySet()) {
+            String target = spyMap.get(spy);
+
+            if(target.equals(sender.getName()) || target.equals("all")) {
+                spy.sendMessage(config.getSpyMessage()
+                        .replace("%sender%", sender.getName())
+                        .replace("%receiver%", receiver.getName())
+                        .replace("%message%", message));
+            }
+        }
     }
 
     @EventHandler
@@ -93,6 +107,8 @@ public class CWBungee extends Plugin implements Listener {
     public void onDisconnect(PlayerDisconnectEvent e) {
         UserData data = UserData.getData(e.getPlayer());
         if (data != null) data.destroy();
+
+        spyMap.remove(e.getPlayer());
     }
 
     //region singleton
@@ -103,4 +119,9 @@ public class CWBungee extends Plugin implements Listener {
         return _instance;
     }
     //endregion
+
+
+    public HashMap<ProxiedPlayer, String> getSpyMap() {
+        return spyMap;
+    }
 }

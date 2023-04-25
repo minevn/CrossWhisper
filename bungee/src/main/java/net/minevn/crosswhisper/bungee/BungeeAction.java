@@ -28,8 +28,16 @@ public enum BungeeAction {
             ProxiedPlayer receiver = main.getProxy().getPlayer(udata.getLastMessage());
             main.sendMessage(sender, receiver, message);
         }
-    }
-    ;
+    },
+    SPY {
+        @Override
+        public void doAction(CWBungee main, DataInputStream data) throws IOException {
+            ProxiedPlayer spy = main.getProxy().getPlayer(data.readUTF());
+            String target = data.readUTF();
+            main.getSpyMap().put(spy, target);
+            spy.sendMessage(main.getConfig().getTargetSelectedMessage().replace("%target%", target));
+        }
+    };
 
     public abstract void doAction(CWBungee main, DataInputStream data) throws IOException;
 }
