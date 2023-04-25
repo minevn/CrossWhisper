@@ -16,8 +16,9 @@ public class Configs {
     private String m_notonline;
     private String m_self;
     private String m_norecent;
-    private String m_spy;
     private String m_targetselected;
+    private String m_targetsent;
+    private String m_targetreceived;
 
     @SuppressWarnings("ConstantConditions")
     public Configs(CWBungee main) {
@@ -30,7 +31,8 @@ public class Configs {
             m_notonline = ChatColor.translateAlternateColorCodes('&', message.getString("not-online"));
             m_self = ChatColor.translateAlternateColorCodes('&', message.getString("self"));
             m_norecent = ChatColor.translateAlternateColorCodes('&', message.getString("no-recent"));
-            m_spy = ChatColor.translateAlternateColorCodes('&', message.getString("spy"));
+            m_targetsent = ChatColor.translateAlternateColorCodes('&', message.getString("target-sent"));
+            m_targetreceived = ChatColor.translateAlternateColorCodes('&', message.getString("target-received"));
             m_targetselected = ChatColor.translateAlternateColorCodes('&', message.getString("target-selected"));
         } catch (Exception ex) {
             main.getLogger().log(Level.SEVERE, "Error loading config", ex);
@@ -41,8 +43,12 @@ public class Configs {
         return m_targetselected;
     }
 
-    public String getSpyMessage() {
-        return m_spy;
+    public String getTargetSentMessage() {
+        return m_targetsent;
+    }
+
+    public String getTargetReceivedMessage() {
+        return m_targetreceived;
     }
 
     public String getSentMessage() {

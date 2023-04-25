@@ -79,9 +79,14 @@ public class CWBungee extends Plugin implements Listener {
             String target = spyMap.get(spy);
 
             if(target.equals(sender.getName()) || target.equals("all")) {
-                spy.sendMessage(config.getSpyMessage()
-                        .replace("%sender%", sender.getName())
+                spy.sendMessage(config.getTargetSentMessage()
+                        .replace("%target%", sender.getName())
                         .replace("%receiver%", receiver.getName())
+                        .replace("%message%", message));
+            } else if (target.equals(receiver.getName())) {
+                spy.sendMessage(config.getTargetReceivedMessage()
+                        .replace("%sender%", sender.getName())
+                        .replace("%target%", receiver.getName())
                         .replace("%message%", message));
             }
         }
