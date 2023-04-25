@@ -74,6 +74,8 @@ public class CWBukkit extends JavaPlugin {
         }
 
         if (command.getName().equals("spy")) {
+            if (!player.hasPermission("crosswhisper.spy")) return true;
+
             String target = args.length < 1 ? "all" : args[0];
             sendSpyRequest(player, target);
         }
