@@ -78,7 +78,7 @@ public class CWBungee extends Plugin implements Listener {
 
         for (Map.Entry<ProxiedPlayer, String> entry : spyMap.entrySet()) {
             ProxiedPlayer spy = entry.getKey();
-            String target = spyMap.get(spy);
+            String target = entry.getValue();
 
             if (target.equals(sender.getName()) || target.equals("all")) {
                 spy.sendMessage(
