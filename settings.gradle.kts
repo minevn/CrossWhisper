@@ -4,8 +4,8 @@
 
 rootProject.name = "CrossWhisper"
 include(":CrossWhisperModels")
-include(":CrossWhipserBukkit")
+include(":CrossWhisperBukkit")
 include(":CrossWhisperBungee")
 project(":CrossWhisperModels").projectDir = file("models")
-project(":CrossWhipserBukkit").projectDir = file("bukkit")
+project(":CrossWhisperBukkit").projectDir = file("bukkit")
 project(":CrossWhisperBungee").projectDir = file("bungee")
