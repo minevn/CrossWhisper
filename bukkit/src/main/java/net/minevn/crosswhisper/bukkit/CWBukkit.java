@@ -43,6 +43,14 @@ public class CWBukkit extends JavaPlugin {
         sendMessage(sender, data);
     }
 
+    public void sendSpyRequest(Player spy, String target) {
+        ByteArrayDataOutput data = ByteStreams.newDataOutput();
+        data.writeUTF("SPY");
+        data.writeUTF(spy.getName());
+        data.writeUTF(target);
+        sendMessage(spy, data);
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) return true;
@@ -64,6 +72,14 @@ public class CWBukkit extends JavaPlugin {
             String message = String.join(" ", args);
             sendReply(player, message);
         }
+
+        if (command.getName().equals("spy")) {
+            if (!player.hasPermission("crosswhisper.spy")) return true;
+
+            String target = args.length < 1 ? "all" : args[0];
+            sendSpyRequest(player, target);
+        }
+
         return true;
     }
 }

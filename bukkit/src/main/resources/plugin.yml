@@ -12,3 +12,5 @@ commands:
   r:
     aliases:
       - reply
+  spy:
+    permission: crosswhisper.spy

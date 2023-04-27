@@ -5,3 +5,6 @@ message:
  not-online: '&cNgười này hiện không online.'
  self: '&cBạn không thể gửi tin nhắn đến chính mình.'
  no-recent: '&cGần đây bạn không nhắn tin riêng với ai.'
+ target-sent: '&d%target% &ađã nhắn đến &b%receiver% &6&l&o> &f%message%'
+ target-received: "&b%sender% &ađã nhắn đến &d%target% &6&l&o> &f%message%"
+ target-selected: '&aĐã đổi đối tượng theo dõi thành &b%target%'

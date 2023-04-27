@@ -11,11 +11,14 @@ import net.minevn.crosswhisper.models.Constants;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class CWBungee extends Plugin implements Listener {
     private Configs config;
+    private ConcurrentHashMap<ProxiedPlayer, String> spyMap;
 
     @Override
     public void onEnable() {
@@ -24,6 +27,7 @@ public class CWBungee extends Plugin implements Listener {
         getProxy().getPluginManager().registerListener(this, this);
         generateConfig();
         config = new Configs(this);
+        spyMap = new ConcurrentHashMap<>();
     }
 
     private void generateConfig() {
@@ -71,6 +75,27 @@ public class CWBungee extends Plugin implements Listener {
                 .replace("%receiver%", receiver.getName())
                 .replace("%message%", message)
         );
+
+        for (Map.Entry<ProxiedPlayer, String> entry : spyMap.entrySet()) {
+            ProxiedPlayer spy = entry.getKey();
+            String target = entry.getValue();
+
+            if (target.equals(sender.getName()) || target.equals("all")) {
+                spy.sendMessage(
+                        config.getTargetSentMessage()
+                                .replace("%target%", sender.getName())
+                                .replace("%receiver%", receiver.getName())
+                                .replace("%message%", message)
+                );
+            } else if (target.equals(receiver.getName())) {
+                spy.sendMessage(
+                        config.getTargetReceivedMessage()
+                                .replace("%sender%", sender.getName())
+                                .replace("%target%", receiver.getName())
+                                .replace("%message%", message)
+                );
+            }
+        }
     }
 
     @EventHandler
@@ -93,6 +118,8 @@ public class CWBungee extends Plugin implements Listener {
     public void onDisconnect(PlayerDisconnectEvent e) {
         UserData data = UserData.getData(e.getPlayer());
         if (data != null) data.destroy();
+
+        spyMap.remove(e.getPlayer());
     }
 
     //region singleton
@@ -103,4 +130,9 @@ public class CWBungee extends Plugin implements Listener {
         return _instance;
     }
     //endregion
+
+
+    public ConcurrentHashMap<ProxiedPlayer, String> getSpyMap() {
+        return spyMap;
+    }
 }
